@@ -32,6 +32,7 @@ from simpletransformers.classification.transformer_models.distilbert_model impor
 from simpletransformers.classification.transformer_models.flaubert_model import FlaubertForSequenceClassification
 from simpletransformers.classification.transformer_models.roberta_model import RobertaForSequenceClassification
 from simpletransformers.classification.transformer_models.xlm_model import XLMForSequenceClassification
+from simpletransformers.classification.transformer_models.covidbert_model import CovidBertForSequenceClassification
 from simpletransformers.classification.transformer_models.xlm_roberta_model import XLMRobertaForSequenceClassification
 from simpletransformers.classification.transformer_models.xlnet_model import XLNetForSequenceClassification
 from simpletransformers.config.global_args import global_args
@@ -63,7 +64,10 @@ from transformers import (
     XLNetConfig,
     XLNetTokenizer,
     get_linear_schedule_with_warmup,
+    AutoConfig,
+    AutoTokenizer
 )
+
 
 try:
     import wandb
@@ -93,6 +97,9 @@ class ClassificationModel:
             cuda_device (optional): Specific GPU that should be used. Will use the first available GPU by default.
             **kwargs (optional): For providing proxies, force_download, resume_download, cache_dir and other options specific to the 'from_pretrained' implementation where this will be supplied.
         """  # noqa: ignore flake8"
+        if model_type=="covidbert":
+            CovidConfig = AutoConfig.from_pretrained('deepset/covid_bert_base', output_attention=True)
+            CovidTokenizer =  AutoTokenizer.from_pretrained("deepset/covid_bert_base")
 
         MODEL_CLASSES = {
             "bert": (BertConfig, BertForSequenceClassification, BertTokenizer),
@@ -105,7 +112,10 @@ class ClassificationModel:
             "xlmroberta": (XLMRobertaConfig, XLMRobertaForSequenceClassification, XLMRobertaTokenizer),
             "flaubert": (FlaubertConfig, FlaubertForSequenceClassification, FlaubertTokenizer),
             "electra": (ElectraConfig, ElectraForSequenceClassification, ElectraTokenizer),
+            "covidbert":(CovidConfig, CovidBertForSequenceClassification, CovidTokenizer)
         }
+
+
 
         if args and "manual_seed" in args:
             random.seed(args["manual_seed"])
