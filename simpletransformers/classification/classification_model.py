@@ -97,9 +97,7 @@ class ClassificationModel:
             cuda_device (optional): Specific GPU that should be used. Will use the first available GPU by default.
             **kwargs (optional): For providing proxies, force_download, resume_download, cache_dir and other options specific to the 'from_pretrained' implementation where this will be supplied.
         """  # noqa: ignore flake8"
-        if model_type=="covidbert":
-            CovidConfig = AutoConfig.from_pretrained('deepset/covid_bert_base', output_attention=True)
-            CovidTokenizer =  AutoTokenizer.from_pretrained("deepset/covid_bert_base")
+
 
         MODEL_CLASSES = {
             "bert": (BertConfig, BertForSequenceClassification, BertTokenizer),
@@ -112,9 +110,12 @@ class ClassificationModel:
             "xlmroberta": (XLMRobertaConfig, XLMRobertaForSequenceClassification, XLMRobertaTokenizer),
             "flaubert": (FlaubertConfig, FlaubertForSequenceClassification, FlaubertTokenizer),
             "electra": (ElectraConfig, ElectraForSequenceClassification, ElectraTokenizer),
-            "covidbert":(CovidConfig, CovidBertForSequenceClassification, CovidTokenizer)
-        }
 
+        }
+        if model_type=="covidbert":
+            CovidConfig = AutoConfig.from_pretrained(model_name, output_attention=True)
+            CovidTokenizer =  AutoTokenizer.from_pretrained(model_name)
+            MODEL_CLASSES.update({"covidbert":(CovidConfig, CovidBertForSequenceClassification, CovidTokenizer)})
 
 
         if args and "manual_seed" in args:
