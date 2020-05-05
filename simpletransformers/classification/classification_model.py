@@ -47,7 +47,6 @@ from transformers import (
     AlbertTokenizer,
     BertConfig,
     BertTokenizer,
-    BertForTokenClassification,
     CamembertConfig,
     CamembertTokenizer,
     DistilBertConfig,
