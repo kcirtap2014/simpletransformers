@@ -82,7 +82,7 @@ logger = logging.getLogger(__name__)
 
 class ClassificationModel:
     def __init__(
-        self, model_type, model_name, num_labels=None, weight=None, args=None, use_cuda=True, cuda_device=-1, **kwargs,
+        self, model_type, model_name, model_config=None, num_labels=None, weight=None, args=None, use_cuda=True, cuda_device=-1, **kwargs,
     ):
 
         """
@@ -119,7 +119,8 @@ class ClassificationModel:
             MODEL_CLASSES.update({"covidbert":(CovidConfig, CovidBertForSequenceClassification, CovidTokenizer)})
 
         if model_type =="biobert":
-           MODEL_CLASSES.update({"biobert": (BertConfig, BertForTokenClassification, BertTokenizer)})
+            BioBertConfig = BertConfig.from_pretrained(model_config, output_attention=True)
+            MODEL_CLASSES.update({"biobert": (BioBertConfig, BertForSequenceClassification, BertTokenizer)})
 
         if args and "manual_seed" in args:
             random.seed(args["manual_seed"])
