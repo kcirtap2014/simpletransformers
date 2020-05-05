@@ -47,6 +47,7 @@ from transformers import (
     AlbertTokenizer,
     BertConfig,
     BertTokenizer,
+    BertForTokenClassification,
     CamembertConfig,
     CamembertTokenizer,
     DistilBertConfig,
@@ -65,7 +66,7 @@ from transformers import (
     XLNetTokenizer,
     get_linear_schedule_with_warmup,
     AutoConfig,
-    AutoTokenizer
+    AutoTokenizer,
 )
 
 
@@ -117,6 +118,8 @@ class ClassificationModel:
             CovidTokenizer =  AutoTokenizer.from_pretrained(model_name)
             MODEL_CLASSES.update({"covidbert":(CovidConfig, CovidBertForSequenceClassification, CovidTokenizer)})
 
+        if model_type =="biobert":
+           MODEL_CLASSES.update({"biobert": (BertConfig, BertForTokenClassification, BertTokenizer)})
 
         if args and "manual_seed" in args:
             random.seed(args["manual_seed"])
